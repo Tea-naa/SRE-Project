@@ -1,0 +1,37 @@
+name: CI/CD Pipeline for Node.js Application
+
+on:
+  push:
+    branches:
+      - main # trigger the pipeline when code is pushed to the main branch
+jobs:
+  deploy:
+    runs-on: ubuntu-latest 
+
+    steps:
+    - name: checkout code
+      uses: actions/checkout@v2
+
+    - name: set up SSH keys
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
+
+    - name: build and push Docker image
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: 'us-east-1'
+      run: |
+        docker build -t teanaa/my-node-app .
+        docker login -u ${{ secrets.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASSWORD}}
+        docker push teanaa/my-node-app
+
+    - name: deploy to AWS EC2 (Docker)
+      run: |
+        ssh -o StrictHostKeyChecking=no -i /home/runner/.ssh/id_rsa ec2-user@44.220.162.241 << 'EOF'
+        docker pull teanaa/my-node-app
+        docker-compose down
+        docker-compose up -d
+        docker system prune -f
+        EOF

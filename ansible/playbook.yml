@@ -1,0 +1,22 @@
+---
+- name: Configure SRE Instance
+  hosts: sre-instance
+  become: true
+  vars:
+    ansible_python_interpreter: /usr/bin/python3  # Point to Python 3 interpreter
+  tasks:
+    - name: Ensure Python 3 is installed
+      yum:
+        name: python3
+        state: present
+
+    - name: Install Docker
+      yum:
+        name: docker
+        state: present
+
+    - name: Start and enable Docker
+      service:
+        name: docker
+        state: started
+        enabled: true

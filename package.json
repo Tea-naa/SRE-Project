@@ -1,0 +1,15 @@
+{
+  "name": "sre-project2",
+  "version": "1.0.0",
+  "description": "Your public key has been saved in /Users/tinabajwa/.ssh/sre_project_key2.pub ssh -i /Users/tinabajwa/.ssh/sre_project_key2 ec2-user@44.220.162.241",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

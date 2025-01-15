@@ -33,6 +33,6 @@ jobs:
         docker pull teanaa/my-node-app
         docker-compose down
         docker-compose up -d
-        docker system prune -f
- EOF
- EOF      
+        docker system prune --volumes -f <<EOF
+        y
+        EOF

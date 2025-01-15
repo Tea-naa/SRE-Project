@@ -15,6 +15,27 @@ app.get('/api', (req, res) => {
   res.json(response);
 });
 
+// New Asynchronous API Route for testing
+app.get('/api/hello', async (req, res) => {
+  try {
+    // Simulating a delay to fetch data (like from a database or external API)
+    const data = await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const fetchedData = {
+          message: "Hello from the asynchronous route!",
+          time: new Date().toLocaleString(),
+          fetchedData: "Data fetched after 2 seconds",
+        };
+        resolve(fetchedData);
+      }, 2000); // Simulate a 2-second delay
+    });
+
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching data' });
+  }
+});
+
 // Listen on all network interfaces
 app.listen(port, '0.0.0.0', () => {
   console.log(`Example app listening at http://localhost:${port}`);
